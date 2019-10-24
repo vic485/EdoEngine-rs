@@ -1,0 +1,6 @@
+﻿# Editor cache
+.idea/
+
+# Builds and Rust files
+target/
+**/*.rs.bk
