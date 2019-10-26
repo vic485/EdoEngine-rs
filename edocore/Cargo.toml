@@ -1,12 +1,12 @@
 [package]
-name = "edoengine"
+name = "edocore"
 version = "0.0.1"
 authors = ["Victor Fugazzotto <victorfuga@gmail.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "edoengine"
-crate-type = ["dylib"]
+name = "edocore"
+crate-type = ["rlib", "dylib"]
 
 [dependencies]

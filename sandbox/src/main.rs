@@ -1,3 +1,7 @@
+extern crate edocore;
+
+use edocore::debug;
+
 fn main() {
-    println!("hello world!");
+    debug::log("hello world!");
 }
