@@ -1,4 +1,10 @@
-﻿use std::ops::{Add, Div, Mul, Neg, Sub};
+﻿//=============================================================================
+// vector2.rs
+//
+// Created by Victor on 2019/10/26
+//=============================================================================
+
+use std::ops::{Add, Div, Mul, Neg, Sub};
 
 /// A two-dimensional vector
 pub struct Vector2 {
@@ -7,6 +13,11 @@ pub struct Vector2 {
 }
 
 impl Vector2 {
+    /// Computes the dot product of two vectors
+    pub fn dot(lhs: Vector2, rhs: Vector2) -> f32 {
+        lhs.x * rhs.x + lhs.y * rhs.y
+    }
+    
     /// Creates a new two-dimensional vector
     pub fn new(x_val: f32, y_val: f32) -> Vector2 {
         Vector2 { x: x_val, y: y_val }

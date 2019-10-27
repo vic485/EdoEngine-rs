@@ -1,2 +1,2 @@
 pub mod debug;
-pub mod vector2;
+pub mod math;
