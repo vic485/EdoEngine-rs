@@ -5,7 +5,8 @@
 //=============================================================================
 
 use std::ops::{Add, Div, Mul, Neg, Sub};
-use crate::math::EPSILON;
+use crate::math::{EPSILON, clamp};
+use std::fmt::{Display, Formatter, Error};
 
 // TODO: Do we need to implement copy and clone ourselves?
 /// A two dimensional vector
@@ -16,6 +17,20 @@ pub struct Vector2 {
 }
 
 impl Vector2 {
+    /// Returns the angle in degrees between two vectors
+    pub fn angle(from: Vector2, to: Vector2) -> f32 {
+        let denominator = (from.square_magnitude() * to.square_magnitude()).sqrt();
+        let dot = clamp(Vector2::dot(from, to) / denominator, -1.0, 1.0);
+        dot.acos().to_degrees()
+    }
+
+    /// Returns the distance between a and b
+    pub fn distance(a: Vector2, b: Vector2) -> f32 {
+        let x_diff = a.x - b.x;
+        let y_diff = a.x - b.x;
+        (x_diff * x_diff + y_diff * y_diff).sqrt()
+    }
+
     /// Computes the dot product of two vectors
     pub fn dot(lhs: Vector2, rhs: Vector2) -> f32 {
         lhs.x * rhs.x + lhs.y * rhs.y
@@ -70,15 +85,41 @@ impl Vector2 {
         v
     }
 
+    pub fn perpendicular(in_dir: Vector2) -> Vector2 {
+        Vector2 { x: -in_dir.y, y: in_dir.x }
+    }
+
+    pub fn reflect(in_dir: Vector2, in_norm: Vector2) -> Vector2 {
+        let factor = -2.0 * Vector2::dot(in_norm, in_dir);
+        Vector2 { x: factor * in_norm.x + in_dir.x, y: factor * in_norm.y * in_dir.y }
+    }
+
     /// Multiplies this vector component-wise by another vector
     pub fn scale(mut self, amount: Vector2) {
         self.x *= amount.x;
         self.y *= amount.y;
     }
 
+    /// Returns the signed angle between two vectors.
+    /// Always returns the smallest possible angle
+    pub fn signed_angle(from: Vector2, to: Vector2) -> f32 {
+        let unsigned_angle = Vector2::angle(from, to);
+        if (from.x * to.y - from.y * to.x).is_sign_positive() {
+            unsigned_angle
+        } else {
+            -unsigned_angle
+        }
+    }
+
     /// Returns the square magnitude of the vector
     pub fn square_magnitude(self) -> f32 {
         self.x * self.x + self.y * self.y
+    }
+}
+
+impl Display for Vector2 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {})", self.x, self.y)
     }
 }
 

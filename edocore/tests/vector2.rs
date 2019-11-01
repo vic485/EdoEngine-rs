@@ -41,6 +41,10 @@ fn test_normalize() {}
 
 fn test_normalized() {}
 
+fn test_perpendicular() {}
+
+fn test_reflect() {}
+
 fn test_scale() {}
 
 #[test]
