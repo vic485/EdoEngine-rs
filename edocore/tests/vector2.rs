@@ -9,6 +9,10 @@ fn test_constructor() {
     assert_eq!(a.y, b.y)
 }
 
+fn test_angle() {}
+
+fn test_distance() {}
+
 #[test]
 fn test_dot() {
     let a = Vector2::new(1.0, 2.0);
@@ -46,6 +50,8 @@ fn test_perpendicular() {}
 fn test_reflect() {}
 
 fn test_scale() {}
+
+fn test_signed_angle() {}
 
 #[test]
 fn test_square_magnitude() {

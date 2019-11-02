@@ -18,6 +18,7 @@ impl Mul<Matrix4> for Matrix4 {
     fn mul(self, rhs: Matrix4) -> Self::Output {
         let mut res = Matrix4{ values: [[0.0; 4]; 4] };
         
+        // This makes me cry
         res.values[0][0] = self.values[0][0] * rhs.values[0][0] + self.values[0][1] * rhs.values[1][0] + self.values[0][2] * rhs.values[2][0] + self.values[0][3] * rhs.values[3][0];
         res.values[0][1] = self.values[0][0] * rhs.values[0][1] + self.values[0][1] * rhs.values[1][1] + self.values[0][2] * rhs.values[2][1] + self.values[0][3] * rhs.values[3][1];
         res.values[0][2] = self.values[0][0] * rhs.values[0][2] + self.values[0][1] * rhs.values[1][2] + self.values[0][2] * rhs.values[2][2] + self.values[0][3] * rhs.values[3][2];

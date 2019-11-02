@@ -80,15 +80,17 @@ impl Vector2 {
 
     /// Returns this vector with a magnitude of 1 
     pub fn normalized(self) -> Vector2 {
-        let v = Vector2 { x: self.x, y: self.y };
+        let v = self.clone();
         v.normalize();
         v
     }
 
+    /// Returns a vector2 perpendicular to the provided
     pub fn perpendicular(in_dir: Vector2) -> Vector2 {
         Vector2 { x: -in_dir.y, y: in_dir.x }
     }
 
+    /// Reflects a vector off the provided normal
     pub fn reflect(in_dir: Vector2, in_norm: Vector2) -> Vector2 {
         let factor = -2.0 * Vector2::dot(in_norm, in_dir);
         Vector2 { x: factor * in_norm.x + in_dir.x, y: factor * in_norm.y * in_dir.y }
@@ -130,6 +132,7 @@ impl PartialEq for Vector2 {
 }
 
 /// A three dimensional vector
+#[derive(Copy, Clone)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
@@ -154,6 +157,110 @@ impl Vector3 {
     }
 }
 
+// A four dimensional vector
+#[derive(Copy, Clone)]
+pub struct Vector4 {
+    pub x: f32,
+    pub y: f32,
+    pub z: f32,
+    pub w: f32,
+}
+
+impl Vector4 {
+    /// Returns the distance between two vectors
+    pub fn distance(a: Vector4, b: Vector4) -> f32 {
+        Vector4::magnitude(a - b)
+    }
+
+    /// Computes the dot product of two vectors
+    pub fn dot(a: Vector4, b: Vector4) -> f32 {
+        a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
+    }
+
+    /// Linearly interpolates between two vectors
+    pub fn lerp(a: Vector4, b: Vector4, t: f32) -> Vector4 {
+        Vector4 {
+            x: a.x + (b.x - a.x) * t,
+            y: a.y + (b.y - a.y) * t,
+            z: a.z + (b.z - a.z) * t,
+            w: a.w + (b.w - a.w) * t,
+        }
+    }
+
+    /// Returns the magnitude of the vector
+    pub fn magnitude(self) -> f32 {
+        Vector4::dot(self, self).sqrt()
+    }
+
+    /// Moves point "current" toward "target"
+    pub fn move_toward(current: Vector4, target: Vector4, max_dist: f32) -> Vector4 {
+        let to_x = target.x - current.x;
+        let to_y = target.y - current.y;
+        let to_z = target.z - current.z;
+        let to_w = target.w - current.w;
+
+        let sqr_dist = to_x * to_x + to_y * to_y + to_z * to_z + to_w * to_w;
+        if sqr_dist == 0.0 || (max_dist >= 0.0 && sqr_dist <= max_dist * max_dist) {
+            return target;
+        }
+
+        let dist = sqr_dist.sqrt();
+        Vector4 {
+            x: current.x + target.x / dist * max_dist,
+            y: current.y + target.y / dist * max_dist,
+            z: current.z + target.z / dist * max_dist,
+            w: current.w + target.w / dist * max_dist,
+        }
+    }
+
+    /// Creates a new Vector4
+    #[inline]
+    pub fn new(x_val: f32, y_val: f32, z_val: f32, w_val: f32) -> Vector4 {
+        Vector4 { x: x_val, y: y_val, z: z_val, w: w_val }
+    }
+
+    /// Makes this vector have a magnitude of 1
+    pub fn normalize(mut self) {
+        let mag = self.magnitude();
+        if mag > EPSILON {
+            self.x /= mag;
+            self.y /= mag;
+            self.z /= mag;
+            self.w /= mag;
+        } else {
+            self.x = 0.0;
+            self.y = 0.0;
+            self.z = 0.0;
+            self.w = 0.0;
+        }
+    }
+
+    /// Returns this vector with a magnitude of 1
+    pub fn normalized(self) -> Vector4 {
+        let v = self.clone();
+        v.normalize();
+        v
+    }
+
+    /// Projects vector "a" onto "b"
+    pub fn project(a: Vector4, b: Vector4) -> Vector4 {
+        b * Vector4::dot(a, b) / Vector4::dot(b, b)
+    }
+
+    /// Multiplies this vector component-wise by another vector
+    pub fn scale(mut self, amount: Vector4) {
+        self.x *= amount.x;
+        self.y *= amount.y;
+        self.z *= amount.z;
+        self.w *= amount.w;
+    }
+
+    /// Returns the square magnitude of the vector
+    pub fn square_magnitude(self) -> f32 {
+        self.x * self.x + self.y * self.y + self.z * self.z + self.w * self.w
+    }
+}
+
 // Operator implementations
 impl Add<Vector2> for Vector2 {
     type Output = Vector2;
@@ -168,6 +275,14 @@ impl Add<Vector3> for Vector3 {
 
     fn add(self, rhs: Vector3) -> Self::Output {
         Vector3 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z }
+    }
+}
+
+impl Add<Vector4> for Vector4 {
+    type Output = Vector4;
+
+    fn add(self, rhs: Vector4) -> Self::Output {
+        Vector4 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z, w: self.w + rhs.w }
     }
 }
 
@@ -192,6 +307,14 @@ impl Div<f32> for Vector3 {
 
     fn div(self, rhs: f32) -> Self::Output {
         Vector3 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs }
+    }
+}
+
+impl Div<f32> for Vector4 {
+    type Output = Vector4;
+
+    fn div(self, rhs: f32) -> Self::Output {
+        Vector4 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs, w: self.w / rhs }
     }
 }
 
@@ -235,6 +358,22 @@ impl Mul<Vector3> for f32 {
     }
 }
 
+impl Mul<f32> for Vector4 {
+    type Output = Vector4;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        Vector4 { x: self.x * rhs, y: self.y * rhs, z: self.z * rhs, w: self.w * rhs }
+    }
+}
+
+impl Mul<Vector4> for f32 {
+    type Output = Vector4;
+
+    fn mul(self, rhs: Vector4) -> Self::Output {
+        Vector4 { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z, w: self * rhs.w }
+    }
+}
+
 impl Neg for Vector2 {
     type Output = Vector2;
 
@@ -251,6 +390,14 @@ impl Neg for Vector3 {
     }
 }
 
+impl Neg for Vector4 {
+    type Output = Vector4;
+
+    fn neg(self) -> Self::Output {
+        Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+    }
+}
+
 impl Sub<Vector2> for Vector2 {
     type Output = Vector2;
 
@@ -264,5 +411,13 @@ impl Sub<Vector3> for Vector3 {
 
     fn sub(self, rhs: Vector3) -> Self::Output {
         Vector3 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z }
+    }
+}
+
+impl Sub<Vector4> for Vector4 {
+    type Output = Vector4;
+
+    fn sub(self, rhs: Vector4) -> Self::Output {
+        Vector4 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z, w: self.w - rhs.w }
     }
 }
