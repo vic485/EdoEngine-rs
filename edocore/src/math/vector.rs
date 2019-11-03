@@ -261,6 +261,18 @@ impl Vector4 {
     }
 }
 
+impl Display for Vector4 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
+    }
+}
+
+impl PartialEq for Vector4 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+    }
+}
+
 // Operator implementations
 impl Add<Vector2> for Vector2 {
     type Output = Vector2;
