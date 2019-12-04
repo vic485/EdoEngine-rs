@@ -10,3 +10,4 @@ name = "edocore"
 crate-type = ["rlib", "dylib"]
 
 [dependencies]
+log = "0.4.0"
