@@ -78,7 +78,7 @@ impl Vector2 {
         }
     }
 
-    /// Returns this vector with a magnitude of 1 
+    /// Returns this vector with a magnitude of 1
     pub fn normalized(self) -> Vector2 {
         let v = self.clone();
         v.normalize();
@@ -119,18 +119,6 @@ impl Vector2 {
     }
 }
 
-impl Display for Vector2 {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
-        write!(f, "({}, {})", self.x, self.y)
-    }
-}
-
-impl PartialEq for Vector2 {
-    fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && self.y == other.y
-    }
-}
-
 /// A three dimensional vector
 #[derive(Copy, Clone)]
 pub struct Vector3 {
@@ -152,6 +140,20 @@ impl Vector3 {
 
     /// Creates a new Vector3
     #[inline]
+    pub fn new(x_val: f32, y_val: f32, z_val: f32) -> Vector3 {
+        Vector3 { x: x_val, y: y_val, z: z_val }
+    }
+}
+
+/// A three-dimensional vector of integers
+pub struct IVector3 {
+    pub x: i32,
+    pub y: i32,
+    pub z: i32,
+}
+
+impl IVector3 {
+    /// Creates a new three-dimensional vector
     pub fn new(x_val: f32, y_val: f32, z_val: f32) -> Vector3 {
         Vector3 { x: x_val, y: y_val, z: z_val }
     }
@@ -261,9 +263,45 @@ impl Vector4 {
     }
 }
 
+impl Display for Vector2 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+impl Display for Vector3 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {}, {})", self.x, self.y, self.z)
+    }
+}
+
+impl Display for IVector3 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "(i{}, i{}, i{})", self.x, self.y, self.z)
+    }
+}
+
 impl Display for Vector4 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
+    }
+}
+
+impl PartialEq for Vector2 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
+}
+
+impl PartialEq for Vector3 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z
+    }
+}
+
+impl PartialEq for IVector3 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z
     }
 }
 
@@ -287,6 +325,14 @@ impl Add<Vector3> for Vector3 {
 
     fn add(self, rhs: Vector3) -> Self::Output {
         Vector3 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z }
+    }
+}
+
+impl Add<IVector3> for IVector3 {
+    type Output = IVector3;
+
+    fn add(self, rhs: IVector3) -> Self::Output {
+        IVector3 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z }
     }
 }
 
@@ -319,6 +365,14 @@ impl Div<f32> for Vector3 {
 
     fn div(self, rhs: f32) -> Self::Output {
         Vector3 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs }
+    }
+}
+
+impl Div<i32> for IVector3 {
+    type Output = IVector3;
+
+    fn div(self, rhs: i32) -> Self::Output {
+        IVector3 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs }
     }
 }
 
