@@ -29,6 +29,8 @@ pub mod voxel_data;
 use voxel_data::voxelgrid::VoxelGrid;
 use std::mem;
 
+use edocore::math::vector::{UVector3};
+
 fn main() {
     // debug::log(&*format!("What's good lads, 512x512x512 u8's would take up {} memory", mem::size_of::<VoxelGrid>() ));
     let mut builder = pretty_env_logger::formatted_builder();
@@ -68,7 +70,7 @@ fn main() {
 
     let mut halstate = HalState::new(&event_loop, pc);
 
-    let mut vg = VoxelGrid::new();
+    let mut vg = VoxelGrid::new(UVector3::new(512, 512, 512));
 
     let mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0));
     halstate.add_mesh(mesh1);

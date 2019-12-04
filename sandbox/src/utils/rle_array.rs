@@ -28,9 +28,6 @@ where   T: PartialEq,
         let full_sets = capacity / (std::u8::MAX as usize);
         let remainder = capacity - full_sets * (std::u8::MAX as usize);
 
-        info!("full_sets: {}", full_sets);
-        info!("remainder: {}", remainder);
-
         for _i in 0..full_sets {
             data.push((default, std::u8::MAX));
         }

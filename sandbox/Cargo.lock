@@ -271,6 +271,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 [[package]]
 name = "edocore"
 version = "0.0.1"
+dependencies = [
+ "log 0.4.8 (registry+https://github.com/rust-lang/crates.io-index)",
+]
 
 [[package]]
 name = "edorenderer"
