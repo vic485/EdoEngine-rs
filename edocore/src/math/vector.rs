@@ -4,6 +4,9 @@
 // Created by Victor on 2019/10/31
 //=============================================================================
 
+// TODO: Please for the love of god can we make this generics in the future?
+// I (Luuk) will gladly do it for you if you want.
+
 use std::ops::{Add, Div, Mul, Neg, Sub};
 use crate::math::{EPSILON, clamp};
 use std::fmt::{Display, Formatter, Error};
