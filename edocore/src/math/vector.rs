@@ -8,7 +8,33 @@ use std::ops::{Add, Div, Mul, Neg, Sub};
 use crate::math::{EPSILON, clamp};
 use std::fmt::{Display, Formatter, Error};
 
-// TODO: Do we need to implement copy and clone ourselves?
+/// A two dimensional vector of integers
+#[derive(Copy, Clone)]
+pub struct IVector2 {
+    pub x: i32,
+    pub y: i32,
+}
+
+impl IVector2 {
+    pub fn new(x_val: i32, y_val: i32) -> IVector2 {
+        IVector2 {x: x_val, y: y_val }
+    }
+}
+
+/// A two dimensional vector of unsigned integers
+#[derive(Copy, Clone)]
+pub struct UVector2 {
+    pub x: u32,
+    pub y: u32,
+}
+
+impl UVector2 {
+    pub fn new(x_val: u32, y_val: u32) -> UVector2 {
+        UVector2 {x: x_val, y: y_val }
+    }
+}
+
+// TODO: Do we need to implement copy and clone ourselves? ANSWER: Yes
 /// A two dimensional vector
 #[derive(Copy, Clone)]
 pub struct Vector2 {
@@ -146,6 +172,7 @@ impl Vector3 {
 }
 
 /// A three-dimensional vector of integers
+#[derive(Copy, Clone)]
 pub struct IVector3 {
     pub x: i32,
     pub y: i32,
@@ -160,6 +187,7 @@ impl IVector3 {
 }
 
 /// A three-dimensional vector of unsigned integers
+#[derive(Copy, Clone)]
 pub struct UVector3 {
     pub x: u32,
     pub y: u32,
@@ -277,7 +305,49 @@ impl Vector4 {
     }
 }
 
+// A four dimensional vector of integers
+#[derive(Copy, Clone)]
+pub struct IVector4 {
+    pub x: i32,
+    pub y: i32,
+    pub z: i32,
+    pub w: i32,
+}
+
+impl IVector4 {
+    pub fn new(x_val: i32, y_val: i32, z_val: i32, w_val: i32) -> IVector4 {
+        IVector4 { x: x_val, y: y_val, z: z_val, w: w_val }
+    }
+}
+
+// A four dimensional vector of unsigned integers
+#[derive(Copy, Clone)]
+pub struct UVector4 {
+    pub x: u32,
+    pub y: u32,
+    pub z: u32,
+    pub w: u32,
+}
+
+impl UVector4 {
+    pub fn new(x_val: u32, y_val: u32, z_val: u32, w_val: u32) -> UVector4 {
+        UVector4 { x: x_val, y: y_val, z: z_val, w: w_val }
+    }
+}
+
 impl Display for Vector2 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+impl Display for IVector2 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+
+impl Display for UVector2 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "({}, {})", self.x, self.y)
     }
@@ -307,7 +377,31 @@ impl Display for Vector4 {
     }
 }
 
+impl Display for IVector4 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
+    }
+}
+
+impl Display for UVector4 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
+    }
+}
+
 impl PartialEq for Vector2 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
+}
+
+impl PartialEq for IVector2 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y
+    }
+}
+
+impl PartialEq for UVector2 {
     fn eq(&self, other: &Self) -> bool {
         self.x == other.x && self.y == other.y
     }
@@ -325,7 +419,25 @@ impl PartialEq for IVector3 {
     }
 }
 
+impl PartialEq for UVector3 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z
+    }
+}
+
 impl PartialEq for Vector4 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+    }
+}
+
+impl PartialEq for IVector4 {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
+    }
+}
+
+impl PartialEq for UVector4 {
     fn eq(&self, other: &Self) -> bool {
         self.x == other.x && self.y == other.y && self.z == other.z && self.w == other.w
     }
@@ -337,6 +449,22 @@ impl Add<Vector2> for Vector2 {
 
     fn add(self, rhs: Vector2) -> Self::Output {
         Vector2 { x: self.x + rhs.x, y: self.y + rhs.y }
+    }
+}
+
+impl Add<IVector2> for IVector2 {
+    type Output = IVector2;
+
+    fn add(self, rhs: IVector2) -> Self::Output {
+        IVector2 { x: self.x + rhs.x, y: self.y + rhs.y }
+    }
+}
+
+impl Add<UVector2> for UVector2 {
+    type Output = UVector2;
+
+    fn add(self, rhs: UVector2) -> Self::Output {
+        UVector2 { x: self.x + rhs.x, y: self.y + rhs.y }
     }
 }
 
@@ -372,6 +500,22 @@ impl Add<Vector4> for Vector4 {
     }
 }
 
+impl Add<IVector4> for IVector4 {
+    type Output = IVector4;
+
+    fn add(self, rhs: IVector4) -> Self::Output {
+        IVector4 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z, w: self.w + rhs.w }
+    }
+}
+
+impl Add<UVector4> for UVector4 {
+    type Output = UVector4;
+
+    fn add(self, rhs: UVector4) -> Self::Output {
+        UVector4 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z, w: self.w + rhs.w }
+    }
+}
+
 impl Div<Vector2> for Vector2 {
     type Output = Vector2;
 
@@ -385,6 +529,38 @@ impl Div<f32> for Vector2 {
 
     fn div(self, rhs: f32) -> Self::Output {
         Vector2 { x: self.x / rhs, y: self.y / rhs }
+    }
+}
+
+impl Div<IVector2> for IVector2 {
+    type Output = IVector2;
+
+    fn div(self, rhs: IVector2) -> Self::Output {
+        IVector2 { x: self.x / rhs.x, y: self.y / rhs.y }
+    }
+}
+
+impl Div<i32> for IVector2 {
+    type Output = IVector2;
+
+    fn div(self, rhs: i32) -> Self::Output {
+        IVector2 { x: self.x / rhs, y: self.y / rhs }
+    }
+}
+
+impl Div<UVector2> for UVector2 {
+    type Output = UVector2;
+
+    fn div(self, rhs: UVector2) -> Self::Output {
+        UVector2 { x: self.x / rhs.x, y: self.y / rhs.y }
+    }
+}
+
+impl Div<u32> for UVector2 {
+    type Output = UVector2;
+
+    fn div(self, rhs: u32) -> Self::Output {
+        UVector2 { x: self.x / rhs, y: self.y / rhs }
     }
 }
 
@@ -420,6 +596,22 @@ impl Div<f32> for Vector4 {
     }
 }
 
+impl Div<i32> for IVector4 {
+    type Output = IVector4;
+
+    fn div(self, rhs: i32) -> Self::Output {
+        IVector4 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs, w: self.w / rhs }
+    }
+}
+
+impl Div<u32> for UVector4 {
+    type Output = UVector4;
+
+    fn div(self, rhs: u32) -> Self::Output {
+        UVector4 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs, w: self.w / rhs }
+    }
+}
+
 impl Mul<Vector2> for Vector2 {
     type Output = Vector2;
 
@@ -444,6 +636,54 @@ impl Mul<Vector2> for f32 {
     }
 }
 
+impl Mul<IVector2> for IVector2 {
+    type Output = IVector2;
+
+    fn mul(self, rhs: IVector2) -> Self::Output {
+        IVector2 { x: self.x * rhs.x, y: self.y * rhs.y }
+    }
+}
+
+impl Mul<i32> for IVector2 {
+    type Output = IVector2;
+
+    fn mul(self, rhs: i32) -> Self::Output {
+        IVector2 { x: self.x * rhs, y: self.y * rhs }
+    }
+}
+
+impl Mul<IVector2> for i32 {
+    type Output = IVector2;
+
+    fn mul(self, rhs: IVector2) -> Self::Output {
+        IVector2 { x: self * rhs.x, y: self * rhs.y }
+    }
+}
+
+impl Mul<UVector2> for UVector2 {
+    type Output = UVector2;
+
+    fn mul(self, rhs: UVector2) -> Self::Output {
+        UVector2 { x: self.x * rhs.x, y: self.y * rhs.y }
+    }
+}
+
+impl Mul<u32> for UVector2 {
+    type Output = UVector2;
+
+    fn mul(self, rhs: u32) -> Self::Output {
+        UVector2 { x: self.x * rhs, y: self.y * rhs }
+    }
+}
+
+impl Mul<UVector2> for u32 {
+    type Output = UVector2;
+
+    fn mul(self, rhs: UVector2) -> Self::Output {
+        UVector2 { x: self * rhs.x, y: self * rhs.y }
+    }
+}
+
 impl Mul<f32> for Vector3 {
     type Output = Vector3;
 
@@ -457,6 +697,38 @@ impl Mul<Vector3> for f32 {
 
     fn mul(self, rhs: Vector3) -> Self::Output {
         Vector3 { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z }
+    }
+}
+
+impl Mul<i32> for IVector3 {
+    type Output = IVector3;
+
+    fn mul(self, rhs: i32) -> Self::Output {
+        IVector3 { x: self.x * rhs, y: self.y * rhs, z: self.z * rhs }
+    }
+}
+
+impl Mul<IVector3> for i32 {
+    type Output = IVector3;
+
+    fn mul(self, rhs: IVector3) -> Self::Output {
+        IVector3 { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z }
+    }
+}
+
+impl Mul<u32> for UVector3 {
+    type Output = UVector3;
+
+    fn mul(self, rhs: u32) -> Self::Output {
+        UVector3 { x: self.x * rhs, y: self.y * rhs, z: self.z * rhs }
+    }
+}
+
+impl Mul<UVector3> for u32 {
+    type Output = UVector3;
+
+    fn mul(self, rhs: UVector3) -> Self::Output {
+        UVector3 { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z }
     }
 }
 
@@ -476,11 +748,51 @@ impl Mul<Vector4> for f32 {
     }
 }
 
+impl Mul<i32> for IVector4 {
+    type Output = IVector4;
+
+    fn mul(self, rhs: i32) -> Self::Output {
+        IVector4 { x: self.x * rhs, y: self.y * rhs, z: self.z * rhs, w: self.w * rhs }
+    }
+}
+
+impl Mul<IVector4> for i32 {
+    type Output = IVector4;
+
+    fn mul(self, rhs: IVector4) -> Self::Output {
+        IVector4 { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z, w: self * rhs.w }
+    }
+}
+
+impl Mul<u32> for UVector4 {
+    type Output = UVector4;
+
+    fn mul(self, rhs: u32) -> Self::Output {
+        UVector4 { x: self.x * rhs, y: self.y * rhs, z: self.z * rhs, w: self.w * rhs }
+    }
+}
+
+impl Mul<UVector4> for u32 {
+    type Output = UVector4;
+
+    fn mul(self, rhs: UVector4) -> Self::Output {
+        UVector4 { x: self * rhs.x, y: self * rhs.y, z: self * rhs.z, w: self * rhs.w }
+    }
+}
+
 impl Neg for Vector2 {
     type Output = Vector2;
 
     fn neg(self) -> Self::Output {
         Vector2 { x: -self.x, y: -self.y }
+    }
+}
+
+impl Neg for IVector2 {
+    type Output = IVector2;
+
+    fn neg(self) -> Self::Output {
+        IVector2 { x: -self.x, y: -self.y }
     }
 }
 
@@ -492,11 +804,27 @@ impl Neg for Vector3 {
     }
 }
 
+impl Neg for IVector3 {
+    type Output = IVector3;
+
+    fn neg(self) -> Self::Output {
+        IVector3 { x: -self.x, y: -self.y, z: -self.z }
+    }
+}
+
 impl Neg for Vector4 {
     type Output = Vector4;
 
     fn neg(self) -> Self::Output {
         Vector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
+    }
+}
+
+impl Neg for IVector4 {
+    type Output = IVector4;
+
+    fn neg(self) -> Self::Output {
+        IVector4 { x: -self.x, y: -self.y, z: -self.z, w: -self.w }
     }
 }
 
@@ -508,6 +836,22 @@ impl Sub<Vector2> for Vector2 {
     }
 }
 
+impl Sub<IVector2> for IVector2 {
+    type Output = IVector2;
+
+    fn sub(self, rhs: IVector2) -> Self::Output {
+        IVector2 { x: self.x - rhs.x, y: self.y - rhs.y }
+    }
+}
+
+impl Sub<UVector2> for UVector2 {
+    type Output = UVector2;
+
+    fn sub(self, rhs: UVector2) -> Self::Output {
+        UVector2 { x: self.x - rhs.x, y: self.y - rhs.y }
+    }
+}
+
 impl Sub<Vector3> for Vector3 {
     type Output = Vector3;
 
@@ -516,10 +860,42 @@ impl Sub<Vector3> for Vector3 {
     }
 }
 
+impl Sub<IVector3> for IVector3 {
+    type Output = IVector3;
+
+    fn sub(self, rhs: IVector3) -> Self::Output {
+        IVector3 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z }
+    }
+}
+
+impl Sub<UVector3> for UVector3 {
+    type Output = UVector3;
+
+    fn sub(self, rhs: UVector3) -> Self::Output {
+        UVector3 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z }
+    }
+}
+
 impl Sub<Vector4> for Vector4 {
     type Output = Vector4;
 
     fn sub(self, rhs: Vector4) -> Self::Output {
         Vector4 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z, w: self.w - rhs.w }
+    }
+}
+
+impl Sub<IVector4> for IVector4 {
+    type Output = IVector4;
+
+    fn sub(self, rhs: IVector4) -> Self::Output {
+        IVector4 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z, w: self.w - rhs.w }
+    }
+}
+
+impl Sub<UVector4> for UVector4 {
+    type Output = UVector4;
+
+    fn sub(self, rhs: UVector4) -> Self::Output {
+        UVector4 { x: self.x - rhs.x, y: self.y - rhs.y, z: self.z - rhs.z, w: self.w - rhs.w }
     }
 }
