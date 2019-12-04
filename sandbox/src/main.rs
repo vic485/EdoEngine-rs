@@ -23,13 +23,15 @@ use gfx_hal::{
 };
 use log::{debug, error, info, trace, warn, Level, LevelFilter};
 
+pub mod utils;
+
 pub mod voxel_data;
 use voxel_data::voxelgrid::VoxelGrid;
 use std::mem;
 
 fn main() {
     debug::log("hello world!");
-    debug::log(&*format!("What's good lads, 512x512x512 u8's would take up {} memory", mem::size_of::<VoxelGrid>() ));
+    // debug::log(&*format!("What's good lads, 512x512x512 u8's would take up {} memory", mem::size_of::<VoxelGrid>() ));
 
     let mut builder = pretty_env_logger::formatted_builder();
     builder.filter(None, LevelFilter::max()); //Replace None with Some("library_name") to make it only output that stuff. Example: Some("edorenderer")
@@ -65,6 +67,8 @@ fn main() {
     let event_loop = winit::event_loop::EventLoop::new();
 
     let mut halstate = HalState::new(&event_loop, pc);
+
+    let mut vg = VoxelGrid::new();
 
     let mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0));
     halstate.add_mesh(mesh1);
