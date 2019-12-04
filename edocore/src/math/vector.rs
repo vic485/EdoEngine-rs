@@ -154,8 +154,22 @@ pub struct IVector3 {
 
 impl IVector3 {
     /// Creates a new three-dimensional vector
-    pub fn new(x_val: f32, y_val: f32, z_val: f32) -> Vector3 {
-        Vector3 { x: x_val, y: y_val, z: z_val }
+    pub fn new(x_val: i32, y_val: i32, z_val: i32) -> IVector3 {
+        IVector3 { x: x_val, y: y_val, z: z_val }
+    }
+}
+
+/// A three-dimensional vector of unsigned integers
+pub struct UVector3 {
+    pub x: u32,
+    pub y: u32,
+    pub z: u32,
+}
+
+impl UVector3 {
+    /// Creates a new three-dimensional vector
+    pub fn new(x_val: u32, y_val: u32, z_val: u32) -> UVector3 {
+        UVector3 { x: x_val, y: y_val, z: z_val }
     }
 }
 
@@ -281,6 +295,12 @@ impl Display for IVector3 {
     }
 }
 
+impl Display for UVector3 {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
+        write!(f, "(i{}, i{}, i{})", self.x, self.y, self.z)
+    }
+}
+
 impl Display for Vector4 {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), Error> {
         write!(f, "({}, {}, {}, {})", self.x, self.y, self.z, self.w)
@@ -336,6 +356,14 @@ impl Add<IVector3> for IVector3 {
     }
 }
 
+impl Add<UVector3> for UVector3 {
+    type Output = UVector3;
+
+    fn add(self, rhs: UVector3) -> Self::Output {
+        UVector3 { x: self.x + rhs.x, y: self.y + rhs.y, z: self.z + rhs.z }
+    }
+}
+
 impl Add<Vector4> for Vector4 {
     type Output = Vector4;
 
@@ -373,6 +401,14 @@ impl Div<i32> for IVector3 {
 
     fn div(self, rhs: i32) -> Self::Output {
         IVector3 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs }
+    }
+}
+
+impl Div<u32> for UVector3 {
+    type Output = UVector3;
+
+    fn div(self, rhs: u32) -> Self::Output {
+        UVector3 { x: self.x / rhs, y: self.y / rhs, z: self.z / rhs }
     }
 }
 
