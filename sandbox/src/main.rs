@@ -30,12 +30,12 @@ use voxel_data::voxelgrid::VoxelGrid;
 use std::mem;
 
 fn main() {
-    debug::log("hello world!");
     // debug::log(&*format!("What's good lads, 512x512x512 u8's would take up {} memory", mem::size_of::<VoxelGrid>() ));
-
     let mut builder = pretty_env_logger::formatted_builder();
-    builder.filter(None, LevelFilter::max()); //Replace None with Some("library_name") to make it only output that stuff. Example: Some("edorenderer")
+    builder.filter(Some("sandbox"), LevelFilter::max()); //Replace None with Some("library_name") to make it only output that stuff. Example: Some("edorenderer")
     builder.init();
+
+    debug::log("hello world!");
 
     let mut pc = PipelineConfig::new();
     pc.add_descriptor_layouts(vec!(
