@@ -14,6 +14,7 @@ use edorenderer::{
         halstate::HalState,
         types::{mesh::Mesh},
         pipelineconfig::PipelineConfig,
+        meshbuffer::MeshBuffer,
     },
 };
 
@@ -72,14 +73,14 @@ fn main() {
 
     let mut vg = VoxelGrid::new(UVector3::new(512, 512, 512));
 
-    let mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0));
-    halstate.add_mesh(mesh1);
+    let mut mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0));
+    let mesh1_idx = halstate.add_mesh(mesh1);
 
-    let mesh2 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new(-0.5,-0.5, 0.0));
-    halstate.add_mesh(mesh2);
+    let mut mesh2 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new(-0.5,-0.5, 0.0));
+    let mesh2_idx = halstate.add_mesh(mesh2);
 
-    let mesh3 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.0, 0.5, 0.0));
-    halstate.add_mesh(mesh3);
+    let mut mesh3 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.0, 0.5, 0.0));
+    let mesh3_idx = halstate.add_mesh(mesh3);
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = winit::event_loop::ControlFlow::Wait;
@@ -103,6 +104,9 @@ fn main() {
                 _ => {}
             },
             winit::event::Event::EventsCleared => {
+                halstate.render_mesh(mesh1_idx);
+                halstate.render_mesh(mesh2_idx);
+                halstate.render_mesh(mesh3_idx);
                 halstate.render();
             }
             _ => {}
