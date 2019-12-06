@@ -12,7 +12,7 @@ use edorenderer::{
     backend,
     states::{
         halstate::HalState,
-        types::{mesh::Mesh},
+        types::{mesh::Mesh, image::Image, rendertext::RenderText},
         pipelineconfig::PipelineConfig,
         meshbuffer::MeshBuffer,
     },
@@ -71,16 +71,20 @@ fn main() {
 
     let mut halstate = HalState::new(&event_loop, pc);
 
+    let text = RenderText::new(&mut halstate.renderer, String::from("u gay"));
+
     let mut vg = VoxelGrid::new(UVector3::new(512, 512, 512));
 
-    let mut mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0));
+    let mut mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0), Image::default());
     let mesh1_idx = halstate.add_mesh(mesh1);
 
-    let mut mesh2 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new(-0.5,-0.5, 0.0));
+    let mut mesh2 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new(-0.5,-0.5, 0.0), Image::default());
     let mesh2_idx = halstate.add_mesh(mesh2);
 
-    let mut mesh3 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.0, 0.5, 0.0));
-    let mesh3_idx = halstate.add_mesh(mesh3);
+    // let mut mesh3 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.0, 0.5, 0.0), Image::default());
+    // let mesh3_idx = halstate.add_mesh(mesh3);
+    // let mesh3_idx = halstate.create_text(String::from("u gay"));
+    let mesh3_idx = halstate.add_mesh(&*text.meshes[0]);
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = winit::event_loop::ControlFlow::Wait;
