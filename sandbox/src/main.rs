@@ -35,7 +35,7 @@ use edocore::math::vector::{UVector3};
 fn main() {
     // debug::log(&*format!("What's good lads, 512x512x512 u8's would take up {} memory", mem::size_of::<VoxelGrid>() ));
     let mut builder = pretty_env_logger::formatted_builder();
-    builder.filter(Some("sandbox"), LevelFilter::max()); //Replace None with Some("library_name") to make it only output that stuff. Example: Some("edorenderer")
+    builder.filter(Some("edorenderer"), LevelFilter::max()); //Replace None with Some("library_name") to make it only output that stuff. Example: Some("edorenderer")
     builder.init();
 
     debug::log("hello world!");
@@ -71,8 +71,6 @@ fn main() {
 
     let mut halstate = HalState::new(&event_loop, pc);
 
-    let text = RenderText::new(&mut halstate.renderer, String::from("u gay"));
-
     let mut vg = VoxelGrid::new(UVector3::new(512, 512, 512));
 
     let mut mesh1 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.5,-0.5, 0.0), Image::default());
@@ -84,7 +82,9 @@ fn main() {
     // let mut mesh3 = Mesh::<backend::Backend>::new_quad(&mut halstate.renderer, Vector3::new( 0.0, 0.5, 0.0), Image::default());
     // let mesh3_idx = halstate.add_mesh(mesh3);
     // let mesh3_idx = halstate.create_text(String::from("u gay"));
-    let mesh3_idx = halstate.add_mesh(&*text.meshes[0]);
+    // let text_meshes = RenderText::get_meshes(&mut halstate.renderer, String::from("u gay"));
+    // let mesh3_idx = halstate.add_mesh(text_meshes[0]);
+    let text = halstate.add_text(String::from("u gay"));
 
     event_loop.run(move |event, _, control_flow| {
         *control_flow = winit::event_loop::ControlFlow::Wait;
@@ -110,7 +110,7 @@ fn main() {
             winit::event::Event::EventsCleared => {
                 halstate.render_mesh(mesh1_idx);
                 halstate.render_mesh(mesh2_idx);
-                halstate.render_mesh(mesh3_idx);
+                // halstate.render_mesh(mesh3_idx);
                 halstate.render();
             }
             _ => {}
